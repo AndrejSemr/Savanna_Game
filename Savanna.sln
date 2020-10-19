@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.30523.141
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Savanna", "Savanna\Savanna.csproj", "{0D37FCEE-99E4-415F-9645-C99706F94176}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{0D37FCEE-99E4-415F-9645-C99706F94176}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0D37FCEE-99E4-415F-9645-C99706F94176}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0D37FCEE-99E4-415F-9645-C99706F94176}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0D37FCEE-99E4-415F-9645-C99706F94176}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {AE49D1C5-096D-4C96-87CA-C4F0964E6148}
+	EndGlobalSection
+EndGlobal
