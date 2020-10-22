@@ -13,12 +13,8 @@ namespace Savanna
         /// <summary>
         /// Playground grid.
         /// </summary>
-        public int[,] PlaygroundGrid { get; set; }
+        private int[,] PlaygroundGrid { get; set; }
 
-        /// <summary>
-        /// Iteration number.
-        /// </summary>
-        public int IterationNumber { get; set; }
         #endregion
 
         #region Constructors
@@ -37,7 +33,6 @@ namespace Savanna
             }
 
             PlaygroundGrid = new int[rows, columns];
-            IterationNumber = 0;
             ZerroArray();
         }
 
@@ -53,7 +48,7 @@ namespace Savanna
         }
 
         /// <summary>
-        ///  Method randomly fills playground array with 1 (life) or 0 (free) values.
+        ///  Method fills playground array with 0 values.
         /// </summary>
         public void ZerroArray()
         {
@@ -64,6 +59,27 @@ namespace Savanna
                     PlaygroundGrid[i, j] = 0;
                 }
             }
+        }
+
+        /// <summary>
+        /// Method sets new value to playground grid.
+        /// </summary>
+        /// <param name="row"> Row number. </param>
+        /// <param name="colum"> Column number. </param>
+        /// <param name="value"> New value. </param>
+        public void SetValue(int row, int colum, int value)
+        {
+            PlaygroundGrid[row, colum] = value;
+        }
+
+        /// <summary>
+        /// Method sets new value to playground grid.
+        /// </summary>
+        /// <param name="row"> Row number. </param>
+        /// <param name="colum"> Column number. </param>
+        public int GetValue(int row, int colum)
+        {
+            return PlaygroundGrid[row, colum];
         }
 
     }

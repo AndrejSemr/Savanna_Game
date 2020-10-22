@@ -98,5 +98,9 @@ namespace Savanna
             }
         }
 
+        public void DisplayNumberOfHuntersAndHebrivores(int numbersOfHunters, int numberfOfHerbivores)
+        {
+            Console.WriteLine("Hunters: {0} \t Herbivores: {1}",numbersOfHunters,numberfOfHerbivores);
+        }
     }
 }

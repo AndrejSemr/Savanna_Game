@@ -8,9 +8,9 @@ namespace Savanna.Savanna
     public class GameEngine
     {
 
-        private Playground _playground = new Playground(20, 20);
-        private UserUI _userUI = new UserUI();
-        private Savanna _savanna = new Savanna();
+        private IPlayground _playground = new Playground(20, 20);
+        private IUserUI _userUI = new UserUI();
+        private ISavanna _savanna = new Savanna();
 
         /// <summary>
         /// Method start the game.
@@ -55,8 +55,9 @@ namespace Savanna.Savanna
         {
             _savanna.Iteration(_playground);
             _savanna.SetNewPlayground(_playground);
+            (int, int) cortege = _savanna.NumbersOfAnimals();
             _userUI.DisplayPlayground(_playground);
-            _savanna.NumbersOfAnimals();
+            _userUI.DisplayNumberOfHuntersAndHebrivores(cortege.Item1,cortege.Item2);
         }
     }
 }

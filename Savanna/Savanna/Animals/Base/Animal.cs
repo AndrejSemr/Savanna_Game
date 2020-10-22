@@ -1,7 +1,5 @@
-﻿using Savanna;
-using System;
+﻿using System;
 using System.Collections.Generic;
-using System.Text;
 
 namespace Savanna.Savanna.Animals
 {
@@ -26,7 +24,7 @@ namespace Savanna.Savanna.Animals
         /// Animal constructor.
         /// </summary>
         /// <param name="playground"> Playground. </param>
-        public Animal(Playground playground)
+        public Animal(IPlayground playground)
         {
             Random random = new Random();
             int arrayXSize = playground.GetPlaygroundArray().GetLength(0);
@@ -40,7 +38,7 @@ namespace Savanna.Savanna.Animals
                 newXCoord = random.Next(0, arrayXSize);
                 newYCoord = random.Next(0, arrayYSize);
 
-                if(playground.PlaygroundGrid[newXCoord, newYCoord] == 0)
+                if(playground.GetValue(newXCoord, newYCoord) == 0)
                 {
                     XPaygroundCoordinate = newXCoord;
                     YPaygroundCoordinate = newYCoord;

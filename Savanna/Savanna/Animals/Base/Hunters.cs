@@ -1,17 +1,14 @@
-﻿using Savanna;
-using System;
-using System.Collections.Generic;
-using System.Runtime.InteropServices;
-using System.Text;
+﻿using System.Collections.Generic;
 
 namespace Savanna.Savanna.Animals
 {
+
     /// <summary>
     /// Class simulates a herbivore.
     /// </summary>
     public class Hunters : Animal
     {
-        public Hunters(Playground playground) :base(playground)
+        public Hunters(IPlayground playground) :base(playground)
         {
             Health = 100.0;
             VisionRange = 5;

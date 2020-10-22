@@ -1,7 +1,4 @@
-﻿using Savanna;
-using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using System.Collections.Generic;
 
 namespace Savanna.Savanna.Animals
 {
@@ -10,7 +7,7 @@ namespace Savanna.Savanna.Animals
     /// </summary>
     public class Herbivores : Animal
     {
-        public Herbivores(Playground playground):base(playground)
+        public Herbivores(IPlayground playground):base(playground)
         {
         }
 
