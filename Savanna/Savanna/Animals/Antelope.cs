@@ -8,7 +8,9 @@ namespace Savanna.Savanna.Animals
     {
         public Antelope(Playground playground) : base(playground)
         {
-            Health = 40;
+            maximumHealth = 40;
+            Health = maximumHealth;
+            VisionRange = 3;
         }
     }
 }

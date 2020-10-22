@@ -72,12 +72,12 @@ namespace Savanna.Savanna
 
             for (int i = 0; i < hunters.Count; i++)
             {
-                hunters[i].SpecialAction(hunters, hebrivores, xArraySize, yArraySize);
+                hunters[i].SpecialAnimalBehavior(hunters, hebrivores, playground);
             }
 
             for (int i = 0; i < hebrivores.Count; i++)
             {
-                hebrivores[i].SpecialAction(hunters, hebrivores, xArraySize, yArraySize);
+                hebrivores[i].SpecialAnimalBehavior(hunters, hebrivores, playground);
             }
 
             AnimalHealthCheck();

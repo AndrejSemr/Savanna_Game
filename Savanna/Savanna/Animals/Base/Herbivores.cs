@@ -14,8 +14,11 @@ namespace Savanna.Savanna.Animals
         {
         }
 
-        public override void SpecialAction(List<Hunters> hunters, List<Herbivores> herbivores, int xArraySize, int yArraySize)
+        public override void SpecialAnimalBehavior(List<Hunters> hunters, List<Herbivores> herbivores, IPlayground playground)
         {
+            int xArraySize = playground.GetPlaygroundArray().GetLength(0);
+            int yArraySize = playground.GetPlaygroundArray().GetLength(1);
+
             int idOfNearestHerbivores = FindClosestHunterIndex(hunters, xArraySize, yArraySize);
 
             if (idOfNearestHerbivores != -1)
@@ -45,7 +48,11 @@ namespace Savanna.Savanna.Animals
                     distanceOfNearestAnimal = distance;
                 }
             }
-            // Add vision here.
+
+            if (idOfNearestAnimal != -1 && distanceOfNearestAnimal > VisionRange)
+            {
+                return -1;
+            }
 
             return idOfNearestAnimal;
         }

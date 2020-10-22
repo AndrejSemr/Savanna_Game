@@ -10,6 +10,8 @@ namespace Savanna.Savanna.Animals
     /// </summary>
     public abstract class Animal : PositionOnPlayground
     {
+        protected double maximumHealth;
+
         /// <summary>
         /// Animal health metric.
         /// </summary>
@@ -18,7 +20,7 @@ namespace Savanna.Savanna.Animals
         /// <summary>
         /// Animal vision range.
         /// </summary>
-        public int VisionRange { get; set; }
+        protected int VisionRange { get; set; }
 
         /// <summary>
         /// Animal constructor.
@@ -49,7 +51,14 @@ namespace Savanna.Savanna.Animals
 
         }
 
-        public virtual void SpecialAction(List<Hunters> hunters,List<Herbivores> herbivores, int xArraySize, int yArraySize)
+
+        /// <summary>
+        /// Simulating animal behavior.
+        /// </summary>
+        /// <param name="hunters"> List of hunters. </param>
+        /// <param name="herbivores"> List of herbivores. </param>
+        /// <param name="xArraySize"> Playground array </param>
+        public virtual void SpecialAnimalBehavior(List<Hunters> hunters,List<Herbivores> herbivores, IPlayground playground)
         {
             
         }

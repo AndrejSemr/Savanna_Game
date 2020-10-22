@@ -9,7 +9,9 @@ namespace Savanna.Savanna.Animals
     {
         public Lion(Playground playground):base(playground)
         {
-            Health = 20;
+            maximumHealth = 20;
+            Health = maximumHealth;
+            VisionRange = 6;
         }
     }
 }
