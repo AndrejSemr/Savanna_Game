@@ -1,5 +1,5 @@
 ﻿
-namespace Savanna.Playground
+namespace Savanna
 {
     using System;
 

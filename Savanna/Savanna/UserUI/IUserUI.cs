@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace Savanna.Playground
+namespace Savanna
 {
     public interface IUserUI
     {

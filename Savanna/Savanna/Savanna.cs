@@ -1,148 +1,131 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Security.Cryptography.X509Certificates;
-using System.Text;
-using Savanna.Playground;
+using Savanna;
 using Savanna.Savanna.Animals;
 
 namespace Savanna.Savanna
 {
+    /// <summary>
+    /// Class simulated savanna.
+    /// </summary>
     public class Savanna
     {
-        public List<Hunters> carnivores = new List<Hunters>();
-        public List<Herbivores> predators = new List<Herbivores>();
+        public List<Hunters> hunters = new List<Hunters>();
+        public List<Herbivores> hebrivores = new List<Herbivores>();
 
         /// <summary>
         /// Add new Herbivore to Herbivores array.
         /// </summary>
-        /// <param name="animal"> Herbivore animal. </param>
-        public void AddHerbivore(Hunters animal)
+        /// <param name="animal"> Hunter animal. </param>
+        public void AddHunters(Hunters animal)
         {
-            carnivores.Add(animal);
+            hunters.Add(animal);
         }
 
         /// <summary>
-        /// Add new Predator to Predators array.
+        /// Add new Predator to Herbivores array.
         /// </summary>
-        /// <param name="animal"> Predator animal. </param>
-        public void AddPredator(Herbivores animal)
+        /// <param name="animal"> Herbivore animal. </param>
+        public void AddHerbivores(Herbivores animal)
         {
-            predators.Add(animal);
+            hebrivores.Add(animal);
         }
+
+        /// <summary>
+        /// Method create a new animal by animal number.
+        /// </summary>
+        /// <param name="animalNumber"> Anumal number. </param>
+        public void GeneratNewAnimals(Playground _playground, int animalNumber)
+        {
+            switch (animalNumber)
+            {
+                case 1:
+                    AddHunters(new Lion(_playground));
+                    break;
+                case 2:
+                    AddHerbivores(new Antelope(_playground));
+                    break;
+
+
+                /// DELETE AFTER TESTS
+                case -1:
+                    Iteration(_playground);
+                    break;
+            }
+        }
+
 
         public void NumbersOfAnimals()
         {
-            Console.WriteLine("Herbivers: {0} \t Predator: {1}",carnivores.Count, predators.Count);
+            Console.WriteLine("Herbivers: {0} \t Predator: {1}",hunters.Count, hebrivores.Count);
         }
 
         /// <summary>
         /// Method simulate one itaration. 
         /// </summary>
         /// <param name="playground"> Playground. </param>
-        public void Iteration(Playground.Playground playground)
+        public void Iteration(Playground playground)
         {
-            HunterCaughtUpVictim(playground);
+            int xArraySize = playground.GetPlaygroundArray().GetLength(0);
+            int yArraySize = playground.GetPlaygroundArray().GetLength(1);
+
+            for (int i = 0; i < hunters.Count; i++)
+            {
+                hunters[i].SpecialAction(hunters, hebrivores, xArraySize, yArraySize);
+            }
+
+            for (int i = 0; i < hebrivores.Count; i++)
+            {
+                hebrivores[i].SpecialAction(hunters, hebrivores, xArraySize, yArraySize);
+            }
+
+            AnimalHealthCheck();
         }
 
         /// <summary>
         /// Uppdate Playground with new data.
         /// </summary>
         /// <param name="playground"> Playground. </param>
-        public void SetNewPlayground(Playground.Playground playground)
+        public void SetNewPlayground(Playground playground)
         {
             playground.ZerroArray();
 
-            for (int index = 0; index < predators.Count; index++)
+            for (int index = 0; index < hebrivores.Count; index++)
             {
-                int x = predators[index].XPaygroundCoordinate;
-                int y = predators[index].YPaygroundCoordinate;
+                int x = hebrivores[index].XPaygroundCoordinate;
+                int y = hebrivores[index].YPaygroundCoordinate;
                 playground.PlaygroundGrid[x,y] = 2;
             }
 
-            for (int index = 0; index < carnivores.Count; index++)
+            for (int index = 0; index < hunters.Count; index++)
             {
-                int x = carnivores[index].XPaygroundCoordinate;
-                int y = carnivores[index].YPaygroundCoordinate;
+                int x = hunters[index].XPaygroundCoordinate;
+                int y = hunters[index].YPaygroundCoordinate;
                 playground.PlaygroundGrid[x, y] = 1;
             }
         }
-        ////////////////////////////////////////////
-
-        #region HunterCaughtUpVictimRegion
 
         /// <summary>
-        /// Hunter eats victim if he/she is close (1 block).
+        /// Method checks the animals health.
         /// </summary>
-        /// <param name="playground"></param>
-        private void HunterCaughtUpVictim(Playground.Playground playground)
+        private void AnimalHealthCheck()
         {
-            for (int index = 0; index < carnivores.Count; index++)
+            for (int i = 0; i < hunters.Count; i++)
             {
-                int predator_x = 0;
-                int predator_y = 0;
-                int carnivores_x = carnivores[index].XPaygroundCoordinate;
-                int carnivores_y = carnivores[index].YPaygroundCoordinate;
-
-                if (IsAnPredatorCaught(playground.GetPlaygroundArray(), carnivores_x, carnivores_y, out predator_x, out predator_y))
+                if (hunters[i].Health <= 0)
                 {
-                    carnivores[index].Health = 100;
-
-                    int predatorIndex = predators.FindIndex(
-                        elem => elem.XPaygroundCoordinate == predator_x
-                        &&
-                        elem.YPaygroundCoordinate == predator_y
-                        );
-                    predators.RemoveAt(predatorIndex);
-                }
-            }
-        }
-
-        /// <summary>
-        /// Mehod checks if hunter caught victim.
-        /// </summary>
-        /// <param name="playground"> Playground. </param>
-        /// <param name="carnivores_x"> Hunter X coordinat. </param>
-        /// <param name="carnivores_y"> Hunter Y coordinat. </param>
-        /// <param name="predators_x"> Predator X coordinat if he/she is caught.</param>
-        /// <param name="predators_y"> Predator Y coordinat if he/she is caught.</param>
-        /// <returns> bool - True if predator is caught. </returns>
-        private bool IsAnPredatorCaught(int[,] playgroundArray, int x_coord, int y_coord, out int predators_x, out int predators_y)
-        {
-
-            for (int row = -1; row < 2; row++)
-            {
-                for (int column = -1; column < 2; column++)
-                {
-                    int x = GetModulNumber(x_coord, row, playgroundArray.GetLength(0));
-                    int y = GetModulNumber(y_coord, column, playgroundArray.GetLength(1));
-
-                    if(playgroundArray[x, y] == 2)
-                    {
-                        predators_x = x;
-                        predators_y = y;
-                        return true;
-                    }
+                    hunters.RemoveAt(i);
                 }
             }
 
-            predators_x = -1;
-            predators_y = -1;
-            return false;
-        }
-
-        #endregion;
-
-        /// <summary>
-        /// Method return modul number to avoid going out of array.
-        /// </summary>
-        /// <param name="coord"> Current position.</param>
-        /// <param name="offset"> Offset/next coordinate to check. </param>
-        /// <param name="arrayLenght"> Array size/lenght/border. </param>
-        /// <returns> int - Next cell coordinate. </returns>
-        private int GetModulNumber(int coord, int offset, int arrayLenght)
-        {
-            return (coord + offset + arrayLenght) % arrayLenght;
+            for (int i = 0; i < hebrivores.Count; i++)
+            {
+                if (hebrivores[i].Health <= 0)
+                {
+                    hebrivores.RemoveAt(i);
+                }
+            }
         }
     }
 }

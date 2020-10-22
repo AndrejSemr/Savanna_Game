@@ -1,5 +1,5 @@
 ﻿
-namespace Savanna.Playground
+namespace Savanna
 {
     using System;
     using System.Linq;
@@ -53,7 +53,7 @@ namespace Savanna.Playground
         /// <summary>
         /// Methode display playground.
         /// </summary>
-        /// <param name="gamePlayground"> Playground </param>
+        /// <param name="gamePlayground"> Playground. </param>
         public void DisplayPlayground(IPlayground gamePlayground)
         {
             Console.Clear();
@@ -71,7 +71,7 @@ namespace Savanna.Playground
                 for (var j = 0; j < playgroundArray.GetLength(1); j++)
                 {
 
-                    Console.Write("{0,3}", WitchAnumalToDisplay(playgroundArray[i,j]));
+                    Console.Write("{0,3}", WitchAnumalToDisplay(playgroundArray[i,j]) );
                 }
 
                 Console.WriteLine();
@@ -81,7 +81,7 @@ namespace Savanna.Playground
         /// <summary>
         /// Method store animal 'lables' and numbers.
         /// </summary>
-        /// <param name="animalNumber"></param>
+        /// <param name="animalNumber"> Animal number. </param>
         /// <returns> string - Animal 'lable' on playground. </returns>
         private string WitchAnumalToDisplay(int animalNumber)
         {
