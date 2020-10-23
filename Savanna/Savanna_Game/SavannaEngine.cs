@@ -1,7 +1,5 @@
-﻿using System;
+﻿using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
-using Savanna;
 using Savanna.Savanna.Animals;
 
 namespace Savanna.Savanna
@@ -9,10 +7,13 @@ namespace Savanna.Savanna
     /// <summary>
     /// Class simulated savanna.
     /// </summary>
-    public class Savanna : ISavanna
+    public class SavannaEngine : ISavanna
     {
         public List<Hunters> hunters = new List<Hunters>();
         public List<Herbivores> hebrivores = new List<Herbivores>();
+
+        private int _huntersLimit = 20;
+        private int _hebrivoresLimit = 30;
 
         /// <summary>
         /// Add new Hunter to Hunters array.
@@ -33,11 +34,23 @@ namespace Savanna.Savanna
         }
 
         /// <summary>
+        /// Method returns number of hunters and herbivores.
+        /// </summary>
+        /// <returns> (int,int)cortege - Number of hunters, number of hebrivores. </returns>
+        public (int, int) NumbersOfAnimals()
+        {
+            return (hunters.Count, hebrivores.Count);
+        }
+
+        /// <summary>
         /// Method create a new animal based on animal number.
         /// </summary>
         /// <param name="animalNumber"> Anumal number. </param>
         public void GeneratNewAnimals(IPlayground _playground, int animalNumber)
         {
+            (int, int) cortege;
+            IUserUI _userUI;
+
             switch (animalNumber)
             {
                 case 1:
@@ -50,18 +63,25 @@ namespace Savanna.Savanna
 
                 /// DELETE AFTER TESTS
                 case -1:
+                    Antelope antelope1 = new Antelope(_playground) { XPaygroundCoordinate = 2, YPaygroundCoordinate = 2 };
+                    Antelope antelope2 = new Antelope(_playground) { XPaygroundCoordinate = 1, YPaygroundCoordinate = 2 };
+
+                    AddHerbivores(antelope1);
+                    AddHerbivores(antelope2);
+
+                    break;
+
+                case -2:
                     Iteration(_playground);
+                    SetNewPlayground(_playground);
+                    cortege = NumbersOfAnimals();
+
+                    _userUI = new UserUI();
+                    _userUI.DisplayPlayground(_playground);
+                    _userUI.DisplayNumberOfHuntersAndHebrivores(cortege.Item1, cortege.Item2);
+
                     break;
             }
-        }
-
-        /// <summary>
-        /// Method returns number of hunters and herbivores.
-        /// </summary>
-        /// <returns> (int,int)cortege - Number of hunters, number of hebrivores. </returns>
-        public (int,int) NumbersOfAnimals()
-        {
-            return (Hunters: hunters.Count, Hebrivores: hebrivores.Count);
         }
 
         /// <summary>
@@ -73,17 +93,53 @@ namespace Savanna.Savanna
             int xArraySize = playground.GetPlaygroundArray().GetLength(0);
             int yArraySize = playground.GetPlaygroundArray().GetLength(1);
 
+            int huntersBirth = 0;
+            int hebrivoresBirth = 0;
+
             for (int i = 0; i < hunters.Count; i++)
             {
                 hunters[i].SpecialAnimalBehavior(hunters, hebrivores, playground);
+
+                if ((hunters[i].TimeToGiveBorth == 3) && (hunters.Count < _huntersLimit))
+                {
+                    hunters[i].TimeToGiveBorth = 0;
+                    huntersBirth++;
+                }
             }
 
-            for (int i = 0; i < hebrivores.Count; i++)
+            for (int index = 0; index < hebrivores.Count; index++)
             {
-                hebrivores[i].SpecialAnimalBehavior(hunters, hebrivores, playground);
+                hebrivores[index].SpecialAnimalBehavior(hunters, hebrivores, playground);
+
+                if ((hebrivores[index].TimeToGiveBorth > 3) && (hebrivores.Count <= _hebrivoresLimit))
+                {
+                    hebrivores[index].TimeToGiveBorth = 0;
+                    hebrivoresBirth++;
+                }
             }
+
+            Birthday(playground, huntersBirth, true);
+            Birthday(playground, hebrivoresBirth, false);
 
             AnimalHealthCheck();
+        }
+
+        protected void Birthday(IPlayground playground,int counter,bool isHunter)
+        {
+            counter = (counter / 2);
+            for (int index = 0; index < counter; index++)
+            {
+                if (isHunter)
+                {
+                    Lion lion = new Lion(playground);
+                    AddHunters(lion);
+                }
+                else
+                {
+                    Antelope antelope = new Antelope(playground);
+                    AddHerbivores(antelope);
+                }
+            }
         }
 
         /// <summary>
@@ -98,6 +154,7 @@ namespace Savanna.Savanna
             {
                 int x = hebrivores[index].XPaygroundCoordinate;
                 int y = hebrivores[index].YPaygroundCoordinate;
+
                 playground.SetValue(x, y, 2);
             }
 
@@ -105,6 +162,7 @@ namespace Savanna.Savanna
             {
                 int x = hunters[index].XPaygroundCoordinate;
                 int y = hunters[index].YPaygroundCoordinate;
+
                 playground.SetValue(x, y, 1);
             }
         }

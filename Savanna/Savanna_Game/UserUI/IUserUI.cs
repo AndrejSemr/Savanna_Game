@@ -18,6 +18,11 @@ namespace Savanna
         /// <param name="gamePlayground"> Playground. </param>
         public void DisplayPlayground(IPlayground gamePlayground);
 
+        /// <summary>
+        /// Displays number of hunters and herbivores on screen.
+        /// </summary>
+        /// <param name="numbersOfHunters"> Number of hunters. </param>
+        /// <param name="numberfOfHerbivores"> Number of herbivores. </param>
         public void DisplayNumberOfHuntersAndHebrivores(int numbersOfHunters, int numberfOfHerbivores);
     }
 }

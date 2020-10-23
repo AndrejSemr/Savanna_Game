@@ -10,7 +10,7 @@ namespace Savanna.Savanna
 
         private IPlayground _playground = new Playground(20, 20);
         private IUserUI _userUI = new UserUI();
-        private ISavanna _savanna = new Savanna();
+        private ISavanna _savanna = new SavannaEngine();
 
         /// <summary>
         /// Method start the game.
@@ -32,6 +32,7 @@ namespace Savanna.Savanna
         public void KeyLoger()
         {
             int selectedOperation;
+
             do
             {
                 selectedOperation = _userUI.KeyLoger();
@@ -56,6 +57,7 @@ namespace Savanna.Savanna
             _savanna.Iteration(_playground);
             _savanna.SetNewPlayground(_playground);
             (int, int) cortege = _savanna.NumbersOfAnimals();
+
             _userUI.DisplayPlayground(_playground);
             _userUI.DisplayNumberOfHuntersAndHebrivores(cortege.Item1,cortege.Item2);
         }

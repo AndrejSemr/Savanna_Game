@@ -22,7 +22,7 @@ namespace Savanna
         /// <summary>
         /// Method wait that the User press one button from list.
         /// </summary>
-        /// <param name="exitButtin"> Pressed key from list. </param>
+        /// <returns> Button number from list. </returns>
         public int KeyLoger()
         {
             ConsoleKey pressedButtin;
@@ -41,6 +41,11 @@ namespace Savanna
                 }
 
                 if (pressedButtin == ConsoleKey.D)
+                {
+                    return -1;
+                }
+
+                if (pressedButtin == ConsoleKey.F)
                 {
                     return -1;
                 }
@@ -98,6 +103,11 @@ namespace Savanna
             }
         }
 
+        /// <summary>
+        /// Displays number of hunters and herbivores on screen.
+        /// </summary>
+        /// <param name="numbersOfHunters"> Number of hunters. </param>
+        /// <param name="numberfOfHerbivores"> Number of herbivores. </param>
         public void DisplayNumberOfHuntersAndHebrivores(int numbersOfHunters, int numberfOfHerbivores)
         {
             Console.WriteLine("Hunters: {0} \t Herbivores: {1}",numbersOfHunters,numberfOfHerbivores);
