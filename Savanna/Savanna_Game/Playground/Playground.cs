@@ -13,7 +13,7 @@ namespace Savanna
         /// <summary>
         /// Playground grid.
         /// </summary>
-        private int[,] PlaygroundGrid { get; set; }
+        private char[,] PlaygroundGrid { get; set; }
 
         #endregion
 
@@ -32,7 +32,7 @@ namespace Savanna
                 throw new ArgumentOutOfRangeException("Row and Column size must be greater than 0");
             }
 
-            PlaygroundGrid = new int[rows, columns];
+            PlaygroundGrid = new char[rows, columns];
             ZerroArray();
         }
 
@@ -42,7 +42,7 @@ namespace Savanna
         /// Method return playground as an array of numbers.
         /// </summary>
         /// <returns> int[,] - Playground array as array of int. </returns>
-        public int[,] GetPlaygroundArray()
+        public char[,] GetPlaygroundArray()
         {
             return PlaygroundGrid;
         }
@@ -56,7 +56,7 @@ namespace Savanna
             {
                 for (int j = 0; j < PlaygroundGrid.GetLength(1); j++)
                 {
-                    PlaygroundGrid[i, j] = 0;
+                    PlaygroundGrid[i, j] = '.';
                 }
             }
         }
@@ -67,7 +67,7 @@ namespace Savanna
         /// <param name="row"> Row number. </param>
         /// <param name="colum"> Column number. </param>
         /// <param name="value"> New value. </param>
-        public void SetValue(int row, int colum, int value)
+        public void SetValue(int row, int colum, char value)
         {
             PlaygroundGrid[row, colum] = value;
         }
@@ -77,7 +77,7 @@ namespace Savanna
         /// </summary>
         /// <param name="row"> Row number. </param>
         /// <param name="colum"> Column number. </param>
-        public int GetValue(int row, int colum)
+        public char GetValue(int row, int colum)
         {
             return PlaygroundGrid[row, colum];
         }

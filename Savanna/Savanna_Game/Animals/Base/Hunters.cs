@@ -48,7 +48,8 @@ namespace Savanna.Savanna.Animals
                 }
                 else
                 {
-                    Spet(herbivores[idOfNearestHerbivores], (xArraySize, yArraySize),true);
+                    //Spet(herbivores[idOfNearestHerbivores], (xArraySize, yArraySize),true);
+                    Spet(herbivores[idOfNearestHerbivores], playground, true);
                 }
             }
 
@@ -71,7 +72,7 @@ namespace Savanna.Savanna.Animals
 
         public void CheckedBirthday(List<Hunters> h)
         {
-            int idOfNearestHerbivores = FindClosestAnumalIndex(h, 20, 20, true);
+            int idOfNearestHerbivores = FindClosestAnumalIndexByType(h, 20, 20, AnimalType);
             if (idOfNearestHerbivores != -1)
             {
                 double closestHerbivores = DistanceBetweenToAnimalse(XPaygroundCoordinate, YPaygroundCoordinate, h[idOfNearestHerbivores].XPaygroundCoordinate, h[idOfNearestHerbivores].YPaygroundCoordinate, 20, 20);

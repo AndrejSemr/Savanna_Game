@@ -40,14 +40,24 @@ namespace Savanna
                     return 2;
                 }
 
+                if (pressedButtin == ConsoleKey.T)
+                {
+                    return 3;
+                }
+
                 if (pressedButtin == ConsoleKey.D)
+                {
+                    return 4;
+                }
+
+                if (pressedButtin == ConsoleKey.Q)
                 {
                     return -1;
                 }
 
-                if (pressedButtin == ConsoleKey.F)
+                if (pressedButtin == ConsoleKey.W)
                 {
-                    return -1;
+                    return -2;
                 }
 
             } while (pressedButtin != ConsoleKey.Escape);
@@ -69,37 +79,17 @@ namespace Savanna
         /// Methods display playground on console.
         /// </summary>
         /// <param name="playgroundArray"> Playground array</param>
-        private void Drow(int[,] playgroundArray)
+        private void Drow(char[,] playgroundArray)
         {
             for (var i = 0; i < playgroundArray.GetLength(0); i++)
             {
                 for (var j = 0; j < playgroundArray.GetLength(1); j++)
                 {
 
-                    Console.Write("{0,3}", WitchAnumalToDisplay(playgroundArray[i,j]) );
+                    Console.Write("{0,3}", playgroundArray[i,j] );
                 }
 
                 Console.WriteLine();
-            }
-        }
-
-        /// <summary>
-        /// Method store animal 'lables' and numbers.
-        /// </summary>
-        /// <param name="animalNumber"> Animal number. </param>
-        /// <returns> string - Animal 'lable' on playground. </returns>
-        private string WitchAnumalToDisplay(int animalNumber)
-        {
-            switch (animalNumber)
-            {
-                case (1):
-                    return "L";
-                
-                case (2):
-                    return "A";
-
-                default:
-                    return ".";
             }
         }
 

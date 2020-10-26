@@ -1,4 +1,7 @@
-﻿using System.Threading;
+﻿using Savanna.Savanna.Animals;
+using System.Collections;
+using System.Collections.Generic;
+using System.Threading;
 
 namespace Savanna.Savanna
 {
@@ -15,9 +18,11 @@ namespace Savanna.Savanna
         /// <summary>
         /// Method start the game.
         /// </summary>
+        /// https://docs.microsoft.com/en-us/dotnet/csharp/programming-guide/concepts/attributes/creating-custom-attributes
         public void Start()
         {
-            _userUI.DisplayPlayground(_playground);
+
+           _userUI.DisplayPlayground(_playground);
 
             TimerCallback tm = new TimerCallback(GameLifeCycle);
             Timer timer = new Timer(tm, null, 0, 1000);

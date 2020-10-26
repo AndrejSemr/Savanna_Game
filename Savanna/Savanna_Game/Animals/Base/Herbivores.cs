@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Security.Cryptography.X509Certificates;
 
 namespace Savanna.Savanna.Animals
 {
@@ -34,7 +35,8 @@ namespace Savanna.Savanna.Animals
 
             if (idOfNearestHunter != -1)
             {
-                Spet(hunters[idOfNearestHunter], (xArraySize, yArraySize), false);
+                //Spet(hunters[idOfNearestHunter], (xArraySize, yArraySize), false);
+                Spet(hunters[idOfNearestHunter], playground, false);
             }
 
             CheckedBirthday(herbivores);
@@ -46,11 +48,17 @@ namespace Savanna.Savanna.Animals
 
         public void CheckedBirthday(List<Herbivores> h)
         {
-            int idOfNearestHerbivores = FindClosestAnumalIndex(h, 20, 20, true);
+            int idOfNearestHerbivores = FindClosestAnumalIndexByType(h, 20, 20, AnimalType);
 
             if (idOfNearestHerbivores != -1)
             {
-                double closestHerbivores = DistanceBetweenToAnimalse(XPaygroundCoordinate, YPaygroundCoordinate, h[idOfNearestHerbivores].XPaygroundCoordinate, h[idOfNearestHerbivores].YPaygroundCoordinate, 20, 20);
+                double closestHerbivores = DistanceBetweenToAnimalse(
+                    XPaygroundCoordinate,
+                    YPaygroundCoordinate,
+                    h[idOfNearestHerbivores].XPaygroundCoordinate, 
+                    h[idOfNearestHerbivores].YPaygroundCoordinate,
+                    20,20);
+
                 if (closestHerbivores < 1.4143)
                 {
                     TimeToGiveBorth++;
@@ -61,9 +69,7 @@ namespace Savanna.Savanna.Animals
                 {
                     TimeToGiveBorth = 0;
                 }
-                
             }
-            
         }
     }
 }

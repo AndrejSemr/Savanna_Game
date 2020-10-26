@@ -8,10 +8,18 @@ namespace Savanna.Savanna.Animals
     /// </summary>
     public abstract class Animal : PositionOnPlayground
     {
-
+        
         protected double maximumHealth;
 
-        public string DisplayName { get; set; }
+        /// <summary>
+        /// Animal label (L, A...).
+        /// </summary>
+        public char AnimalTypeLabel { get; set; }
+
+        /// <summary>
+        /// Animal type (Lion, Antelope...).
+        /// </summary>
+        public string AnimalType { get; set; }
 
         /// <summary>
         /// Parameter tracks next point birth.
@@ -75,7 +83,7 @@ namespace Savanna.Savanna.Animals
                 newXCoord = GetModulNumber(positionX, randomXShift, arrayXSize);
                 newYCoord = GetModulNumber(positionY, randomYShift, arrayYSize);
 
-                if (playground.GetValue(newXCoord, newYCoord) == 0)
+                if (playground.GetValue(newXCoord, newYCoord) == '.')
                 {
 
                     XPaygroundCoordinate = newXCoord;
@@ -123,6 +131,7 @@ namespace Savanna.Savanna.Animals
         /// <param name="animal"> List of animals. </param>
         /// <param name="xArraySize"> Playground array size (X coordinate). </param>
         /// <param name="yArraySize"> Playground array size (Y coordinate). </param>
+        /// <param name="isPartOfListAnimal"> If it is part of tis list. </param>
         /// <returns> ID of closest animal from list. </returns>
         protected int FindClosestAnumalIndex<T>(List<T> animal, int xArraySize, int yArraySize, bool isPartOfListAnimal) where T : Animal
         {
@@ -132,6 +141,8 @@ namespace Savanna.Savanna.Animals
             for (int index = 0; index < animal.Count; index++)
             {
                 double distance = DistanceBetweenToAnimalse(XPaygroundCoordinate, YPaygroundCoordinate, animal[index].XPaygroundCoordinate, animal[index].YPaygroundCoordinate, xArraySize, yArraySize);
+                
+                // If element compares to itself - skit it.
                 if(isPartOfListAnimal && ( distance == 0))
                 {
                     continue;
@@ -141,6 +152,48 @@ namespace Savanna.Savanna.Animals
                 {
                     idOfClosestAnimal = index;
                     distanceForClosestAnimal = distance;
+                }
+            }
+
+            if (idOfClosestAnimal != -1 && distanceForClosestAnimal > VisionRange)
+            {
+                return -1;
+            }
+
+            return idOfClosestAnimal;
+        }
+
+        /// <summary>
+        /// Method return the ID of closest animal from list by type.
+        /// </summary>
+        /// <typeparam name="T"> Is Animal class. </typeparam>
+        /// <param name="animal"> List of animals. </param>
+        /// <param name="xArraySize"> Playground array size (X coordinate). </param>
+        /// <param name="yArraySize"> Playground array size (Y coordinate). </param>
+        /// <param name="animalType"> Animal type. </param>
+        /// <returns></returns>
+        protected int FindClosestAnumalIndexByType<T>(List<T> animal, int xArraySize, int yArraySize, string animalType) where T : Animal
+        {
+            int idOfClosestAnimal = -1;
+            double distanceForClosestAnimal = double.MaxValue;
+
+            for (int index = 0; index < animal.Count; index++)
+            {
+                if(animalType == animal[index].GetType().Name.ToString()) {
+
+                    double distance = DistanceBetweenToAnimalse(XPaygroundCoordinate, YPaygroundCoordinate, animal[index].XPaygroundCoordinate, animal[index].YPaygroundCoordinate, xArraySize, yArraySize);
+
+                    // If element compares to itself - skit it.
+                    if (distance == 0)
+                    {
+                        continue;
+                    }
+
+                    if (distance < distanceForClosestAnimal)
+                    {
+                        idOfClosestAnimal = index;
+                        distanceForClosestAnimal = distance;
+                    }
                 }
             }
 
@@ -219,15 +272,25 @@ namespace Savanna.Savanna.Animals
         /// <summary>
         /// Method move hunter closer to targer.
         /// </summary>
-        /// <param name="animal"> Herbivore. </param>
-        /// <param name="arraySize"> Array size (rows,columns) </param>
-        protected void Spet(Animal animal, (int, int) arraySize, bool isHunter)
+        /// <param name="animal"> An animal. </param>
+        /// <param name="playground"> Array size (rows,columns) </param>
+        /// <param name="isHunter"> Is it hunter. </param>
+        protected void Spet(Animal animal, IPlayground playground, bool isHunter)
         {
+            (int, int) arraySize = (playground.GetPlaygroundArray().GetLength(0), playground.GetPlaygroundArray().GetLength(1));
+
             int offsetX = ShortenTheDistance(XPaygroundCoordinate, animal.XPaygroundCoordinate, arraySize.Item1, isHunter);
             int offsetY = ShortenTheDistance(YPaygroundCoordinate, animal.YPaygroundCoordinate, arraySize.Item2, isHunter);
 
-            XPaygroundCoordinate = GetModulNumber(XPaygroundCoordinate, offsetX, arraySize.Item1);
-            YPaygroundCoordinate = GetModulNumber(YPaygroundCoordinate, offsetY, arraySize.Item2);
+            int newX = GetModulNumber(XPaygroundCoordinate, offsetX, arraySize.Item1);
+            int newY = GetModulNumber(YPaygroundCoordinate, offsetY, arraySize.Item2);
+
+            if(playground.GetValue(newX, newY) == '.')
+            {
+                XPaygroundCoordinate = newX;
+                YPaygroundCoordinate = newY;
+            }
+
         }
 
         /// <summary>

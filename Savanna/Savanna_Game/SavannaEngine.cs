@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using Savanna.Savanna.Animals;
+using Savanna.Savanna_Game.Animals;
 
 namespace Savanna.Savanna
 {
@@ -48,8 +49,6 @@ namespace Savanna.Savanna
         /// <param name="animalNumber"> Anumal number. </param>
         public void GeneratNewAnimals(IPlayground _playground, int animalNumber)
         {
-            (int, int) cortege;
-            IUserUI _userUI;
 
             switch (animalNumber)
             {
@@ -58,6 +57,12 @@ namespace Savanna.Savanna
                     break;
                 case 2:
                     AddHerbivores(new Antelope(_playground));
+                    break;
+                case 3:
+                    AddHunters(new Tiger(_playground));
+                    break;
+                case 4:
+                    //AddHerbivores(new AnimalDllCreator.Deer(_playground));
                     break;
 
 
@@ -72,13 +77,12 @@ namespace Savanna.Savanna
                     break;
 
                 case -2:
-                    Iteration(_playground);
-                    SetNewPlayground(_playground);
-                    cortege = NumbersOfAnimals();
 
-                    _userUI = new UserUI();
-                    _userUI.DisplayPlayground(_playground);
-                    _userUI.DisplayNumberOfHuntersAndHebrivores(cortege.Item1, cortege.Item2);
+                    Lion lion1 = new Lion(_playground) { XPaygroundCoordinate = 7, YPaygroundCoordinate = 1 };
+                    Lion lion2 = new Lion(_playground) { XPaygroundCoordinate = 8, YPaygroundCoordinate = 1 };
+
+                    AddHunters(lion1);
+                    AddHunters(lion2);
 
                     break;
             }
@@ -111,10 +115,11 @@ namespace Savanna.Savanna
             {
                 hebrivores[index].SpecialAnimalBehavior(hunters, hebrivores, playground);
 
-                if ((hebrivores[index].TimeToGiveBorth > 3) && (hebrivores.Count <= _hebrivoresLimit))
+                if ((hebrivores[index].TimeToGiveBorth >= 3) && (hebrivores.Count <= _hebrivoresLimit))
                 {
                     hebrivores[index].TimeToGiveBorth = 0;
                     hebrivoresBirth++;
+                    
                 }
             }
 
@@ -155,7 +160,7 @@ namespace Savanna.Savanna
                 int x = hebrivores[index].XPaygroundCoordinate;
                 int y = hebrivores[index].YPaygroundCoordinate;
 
-                playground.SetValue(x, y, 2);
+                playground.SetValue(x, y, hebrivores[index].AnimalTypeLabel);
             }
 
             for (int index = 0; index < hunters.Count; index++)
@@ -163,7 +168,7 @@ namespace Savanna.Savanna
                 int x = hunters[index].XPaygroundCoordinate;
                 int y = hunters[index].YPaygroundCoordinate;
 
-                playground.SetValue(x, y, 1);
+                playground.SetValue(x, y, hunters[index].AnimalTypeLabel);
             }
         }
 

@@ -4,6 +4,9 @@
     {
         public Antelope(IPlayground playground) : base(playground)
         {
+            AnimalTypeLabel = 'A';
+            AnimalType= "Antelope";
+
             maximumHealth = 40;
             Health = maximumHealth;
             VisionRange = 3;

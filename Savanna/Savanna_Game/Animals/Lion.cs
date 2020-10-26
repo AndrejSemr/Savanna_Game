@@ -4,6 +4,9 @@
     {
         public Lion(IPlayground playground):base(playground)
         {
+            AnimalTypeLabel = 'L';
+            AnimalType = "Lion";
+
             maximumHealth = 10;
             Health = maximumHealth;
             VisionRange = 6;
