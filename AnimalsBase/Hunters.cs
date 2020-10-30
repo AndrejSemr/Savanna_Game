@@ -1,7 +1,7 @@
-﻿using System.Collections.Generic;
-using System.Collections.Specialized;
+﻿using System;
+using System.Collections.Generic;
 
-namespace Savanna.Savanna.Animals
+namespace AnimalsBase
 {
 
     /// <summary>
@@ -10,19 +10,20 @@ namespace Savanna.Savanna.Animals
     public class Hunters : Animal
     {
         /// <summary>
+        /// Property stores button for creating an animal.
+        /// </summary>
+        public override ConsoleKey AnimalConsoleKey { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
+
+        /// <summary>
         /// Constructor for hunters.
         /// </summary>
-        /// <param name="playground"></param>
-        public Hunters(IPlayground playground) : base(playground)
+        /// <param name="arraySizeX"> Number of rows in array. </param>
+        /// <param name="arraySizeY"> Number of column in array. </param>
+        public Hunters(int arraySizeX, int arraySizeY) : base(arraySizeX,arraySizeY)
         {
             maximumHealth = 30;
             Health = maximumHealth;
             VisionRange = 5;
-        }
-
-        public Hunters(IPlayground playground, int currentPositionX, int currentPositionY, int rangeX, int rangeY)
-                :base(playground, currentPositionX, currentPositionY, rangeX, rangeY)
-        {
         }
 
         /// <summary>
@@ -31,10 +32,10 @@ namespace Savanna.Savanna.Animals
         /// <param name="hunters"> List of hunters. </param>
         /// <param name="herbivores"> List of herbivores. </param>
         /// <param name="playground"> Playground array. </param>
-        public override void SpecialAnimalBehavior(List<Hunters> hunters, List<Herbivores> herbivores, IPlayground playground)
+        public override void SpecialAnimalBehavior(List<Hunters> hunters, List<Herbivores> herbivores, char[,] playground)
         {
-            int xArraySize = playground.GetPlaygroundArray().GetLength(0);
-            int yArraySize = playground.GetPlaygroundArray().GetLength(1);
+            int xArraySize = playground.GetLength(0);
+            int yArraySize = playground.GetLength(1);
 
             int idOfNearestHerbivores = FindClosestAnumalIndex(herbivores, xArraySize, yArraySize,false);
 
@@ -48,12 +49,11 @@ namespace Savanna.Savanna.Animals
                 }
                 else
                 {
-                    //Spet(herbivores[idOfNearestHerbivores], (xArraySize, yArraySize),true);
                     Spet(herbivores[idOfNearestHerbivores], playground, true);
                 }
             }
 
-            CheckedBirthday(hunters);
+            CheckedBirthday(hunters, playground.GetLength(0), playground.GetLength(1));
 
             DecreaseEnergyParDay();
         }
@@ -69,25 +69,28 @@ namespace Savanna.Savanna.Animals
             herbivores.RemoveAt(indexOfHebrivores);
         }
 
-
-        public void CheckedBirthday(List<Hunters> h)
+        /// <summary>
+        /// Method checks animals and decides to increase counter or set 0.
+        /// </summary>
+        /// <param name="hunters"> List of hunters. </param>
+        /// <param name="rowNumber"> Number of rows on playground. </param>
+        /// <param name="columnNumber"> Number of columns on playground. </param>
+        private void CheckedBirthday(List<Hunters> hunters, int rowNumber, int columnNumber)
         {
-            int idOfNearestHerbivores = FindClosestAnumalIndexByType(h, 20, 20, AnimalType);
+            int idOfNearestHerbivores = FindClosestAnumalIndexByType(hunters, rowNumber, columnNumber, AnimalType);
             if (idOfNearestHerbivores != -1)
             {
-                double closestHerbivores = DistanceBetweenToAnimalse(XPaygroundCoordinate, YPaygroundCoordinate, h[idOfNearestHerbivores].XPaygroundCoordinate, h[idOfNearestHerbivores].YPaygroundCoordinate, 20, 20);
+                double closestHerbivores = DistanceBetweenToAnimalse(XPaygroundCoordinate, YPaygroundCoordinate, hunters[idOfNearestHerbivores].XPaygroundCoordinate, hunters[idOfNearestHerbivores].YPaygroundCoordinate, 20, 20);
                 if (closestHerbivores < 1.4143)
                 {
                     TimeToGiveBorth++;
-                    System.Console.WriteLine("Triger");
                 }
                 else
                 {
                     TimeToGiveBorth = 0;
                 }
-
             }
-
         }
+
     }
 }

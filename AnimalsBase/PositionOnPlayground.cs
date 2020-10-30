@@ -1,4 +1,4 @@
-﻿namespace Savanna.Savanna.Animals
+﻿namespace AnimalsBase
 {
     /// <summary>
     /// Class save animal position on bord.

@@ -10,11 +10,11 @@ namespace Savanna
         /// <summary>
         /// Method return playground as an array of numbers.
         /// </summary>
-        /// <returns> int[,] - Playground array as array of int. </returns>
+        /// <returns> Playground array as array of char. </returns>
         public char[,] GetPlaygroundArray();
 
         /// <summary>
-        ///  Method fills playground array with 0 values.
+        ///  Method clear playground array.
         /// </summary>
         public void ZerroArray();
 
@@ -27,7 +27,7 @@ namespace Savanna
         public void SetValue(int row, int colum, char value);
 
         /// <summary>
-        /// Method sets new value to playground grid.
+        /// Method get value from playground grid.
         /// </summary>
         /// <param name="row"> Row number. </param>
         /// <param name="colum"> Column number. </param>

@@ -5,7 +5,9 @@ VisualStudioVersion = 16.0.30523.141
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Savanna", "Savanna\Savanna.csproj", "{0D37FCEE-99E4-415F-9645-C99706F94176}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Savanna_Tests", "Savanna_Tests\Savanna_Tests.csproj", "{05D41585-EDF7-49C6-8563-5122FBDFDADD}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Savanna_Tests", "Savanna_Tests\Savanna_Tests.csproj", "{05D41585-EDF7-49C6-8563-5122FBDFDADD}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AnimalsBase", "AnimalsBase\AnimalsBase.csproj", "{241C17A5-69C8-4543-8A6B-E7018E191F67}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -21,6 +23,10 @@ Global
 		{05D41585-EDF7-49C6-8563-5122FBDFDADD}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{05D41585-EDF7-49C6-8563-5122FBDFDADD}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{05D41585-EDF7-49C6-8563-5122FBDFDADD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{241C17A5-69C8-4543-8A6B-E7018E191F67}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{241C17A5-69C8-4543-8A6B-E7018E191F67}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{241C17A5-69C8-4543-8A6B-E7018E191F67}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{241C17A5-69C8-4543-8A6B-E7018E191F67}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

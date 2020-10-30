@@ -1,16 +1,16 @@
-﻿using System;
+﻿using AnimalsBase;
+using System;
 using System.Collections.Generic;
-using System.Text;
 
 namespace Savanna
 {
     public interface IUserUI
     {
         /// <summary>
-        /// Method wait that the User press one button from list.
+        /// Method return pressed button.
         /// </summary>
-        /// <param name="exitButtin"> Pressed key from list. </param>
-        public int KeyLoger();
+        /// <returns> Pressed button. </returns>
+        public ConsoleKey KeyLoger();
 
         /// <summary>
         /// Methode display playground.
@@ -24,5 +24,12 @@ namespace Savanna
         /// <param name="numbersOfHunters"> Number of hunters. </param>
         /// <param name="numberfOfHerbivores"> Number of herbivores. </param>
         public void DisplayNumberOfHuntersAndHebrivores(int numbersOfHunters, int numberfOfHerbivores);
+
+        /// <summary>
+        /// Displays information about animals.
+        /// </summary>
+        /// <param name="hunters"> List of hunters. </param>
+        /// <param name="herbivores"> List of herbivores. </param>
+        public void DisplayAnimalStatistics(List<Hunters> hunters, List<Herbivores> herbivores);
     }
 }

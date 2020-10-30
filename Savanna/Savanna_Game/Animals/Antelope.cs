@@ -1,20 +1,35 @@
-﻿namespace Savanna.Savanna.Animals
+﻿using AnimalsBase;
+using System;
+
+namespace Animal
 {
     public class Antelope : Herbivores
     {
-        public Antelope(IPlayground playground) : base(playground)
+        /// <summary>
+        /// Property stores button for creating an animal.
+        /// </summary>
+        public override ConsoleKey AnimalConsoleKey
+        {
+            get
+            {
+                return ConsoleKey.A;
+            }
+            set { }
+        }
+
+        /// <summary>
+        /// Constructor for Antelope.
+        /// </summary>
+        /// <param name="arraySizeX"> Number of rows in array. </param>
+        /// <param name="arraySizeY"> Number of column in array. </param>
+        public Antelope(int arraySizeX, int arraySizeY) : base(arraySizeX, arraySizeY)
         {
             AnimalTypeLabel = 'A';
-            AnimalType= "Antelope";
+            AnimalType = "Antelope";
 
             maximumHealth = 40;
             Health = maximumHealth;
             VisionRange = 3;
-        }
-
-        public Antelope(IPlayground playground, int currentPositionX, int currentPositionY, int rangeX, int rangeY)
-        : base(playground, currentPositionX, currentPositionY, rangeX, rangeY)
-        {
         }
     }
 }

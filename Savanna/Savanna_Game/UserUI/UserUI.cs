@@ -1,9 +1,9 @@
-﻿
+﻿using AnimalsBase;
+using System;
+using System.Collections.Generic;
+
 namespace Savanna
 {
-    using System;
-    using System.Linq;
-
     /// <summary>
     /// Class for displaying information (console).
     /// </summary>
@@ -20,49 +20,12 @@ namespace Savanna
         }
 
         /// <summary>
-        /// Method wait that the User press one button from list.
+        /// Method return pressed button.
         /// </summary>
-        /// <returns> Button number from list. </returns>
-        public int KeyLoger()
+        /// <returns> Pressed button. </returns>
+        public ConsoleKey KeyLoger()
         {
-            ConsoleKey pressedButtin;
-            do
-            {
-                pressedButtin = Console.ReadKey().Key;
-
-                if(pressedButtin == ConsoleKey.L)
-                {
-                    return 1;
-                }
-
-                if (pressedButtin == ConsoleKey.A)
-                {
-                    return 2;
-                }
-
-                if (pressedButtin == ConsoleKey.T)
-                {
-                    return 3;
-                }
-
-                if (pressedButtin == ConsoleKey.D)
-                {
-                    return 4;
-                }
-
-                if (pressedButtin == ConsoleKey.Q)
-                {
-                    return -1;
-                }
-
-                if (pressedButtin == ConsoleKey.W)
-                {
-                    return -2;
-                }
-
-            } while (pressedButtin != ConsoleKey.Escape);
-            
-            return 0;
+            return Console.ReadKey().Key;
         }
 
         /// <summary>
@@ -72,25 +35,7 @@ namespace Savanna
         public void DisplayPlayground(IPlayground gamePlayground)
         {
             Console.Clear();
-            Drow(gamePlayground.GetPlaygroundArray()); 
-        }
-        
-        /// <summary>
-        /// Methods display playground on console.
-        /// </summary>
-        /// <param name="playgroundArray"> Playground array</param>
-        private void Drow(char[,] playgroundArray)
-        {
-            for (var i = 0; i < playgroundArray.GetLength(0); i++)
-            {
-                for (var j = 0; j < playgroundArray.GetLength(1); j++)
-                {
-
-                    Console.Write("{0,3}", playgroundArray[i,j] );
-                }
-
-                Console.WriteLine();
-            }
+            Drow(gamePlayground.GetPlaygroundArray());
         }
 
         /// <summary>
@@ -100,7 +45,45 @@ namespace Savanna
         /// <param name="numberfOfHerbivores"> Number of herbivores. </param>
         public void DisplayNumberOfHuntersAndHebrivores(int numbersOfHunters, int numberfOfHerbivores)
         {
-            Console.WriteLine("Hunters: {0} \t Herbivores: {1}",numbersOfHunters,numberfOfHerbivores);
+            Console.WriteLine("Hunters: {0} \t Herbivores: {1}", numbersOfHunters, numberfOfHerbivores);
         }
+
+        /// <summary>
+        /// Displays information about animals.
+        /// </summary>
+        /// <param name="hunters"> List of hunters. </param>
+        /// <param name="herbivores"> List of herbivores. </param>
+        public void DisplayAnimalStatistics(List<Hunters> hunters, List<Herbivores> herbivores)
+        {
+            for (int index = 0; index < hunters.Count; index++)
+            {
+                Console.WriteLine("ID: {0} Animal: {1} \t Health: {2}", index, hunters[index].AnimalType, hunters[index].Health);
+            }
+
+            Console.WriteLine();
+
+            for (int index = 0; index < herbivores.Count; index++)
+            {
+                Console.WriteLine("ID: {0} Animal: {1} \t Health: {2}", index, herbivores[index].AnimalType, herbivores[index].Health);
+            }
+        }
+
+        /// <summary>
+        /// Methods display playground.
+        /// </summary>
+        /// <param name="playgroundArray"> Playground array of chars</param>
+        private void Drow(char[,] playgroundArray)
+        {
+            for (var row = 0; row < playgroundArray.GetLength(0); row++)
+            {
+                for (var column = 0; column < playgroundArray.GetLength(1); column++)
+                {
+                    Console.Write("{0,3}", playgroundArray[row, column]);
+                }
+
+                Console.WriteLine();
+            }
+        }
+
     }
 }

@@ -14,7 +14,15 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\AnimalsBase\AnimalsBase.csproj" />
     <ProjectReference Include="..\Savanna\Savanna.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Reference Include="AnimalDllCreator">
+      <HintPath>..\..\Rebuild_Savanna\Savanna\bin\Debug\netcoreapp3.1\AnimalDllCreator.dll</HintPath>
+      <Private>true</Private>
+    </Reference>
   </ItemGroup>
 
 </Project>

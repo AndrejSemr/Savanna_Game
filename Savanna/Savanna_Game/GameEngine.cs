@@ -1,12 +1,10 @@
-﻿using Savanna.Savanna.Animals;
-using System.Collections;
-using System.Collections.Generic;
+﻿using System;
 using System.Threading;
 
 namespace Savanna.Savanna
 {
     /// <summary>
-    /// Class managing the game.
+    /// Class manages game.
     /// </summary>
     public class GameEngine
     {
@@ -18,10 +16,8 @@ namespace Savanna.Savanna
         /// <summary>
         /// Method start the game.
         /// </summary>
-        /// https://docs.microsoft.com/en-us/dotnet/csharp/programming-guide/concepts/attributes/creating-custom-attributes
         public void Start()
         {
-
            _userUI.DisplayPlayground(_playground);
 
             TimerCallback tm = new TimerCallback(GameLifeCycle);
@@ -36,19 +32,21 @@ namespace Savanna.Savanna
         /// </summary>
         public void KeyLoger()
         {
-            int selectedOperation;
+            ConsoleKey selectedOperation;
 
             do
             {
                 selectedOperation = _userUI.KeyLoger();
 
-                if(selectedOperation == 0)
+                if (selectedOperation == ConsoleKey.Escape)
                 {
                     break;
                 }
 
-                _savanna.GeneratNewAnimals(_playground ,selectedOperation);
-                _savanna.SetNewPlayground(_playground);
+                _savanna.GeneratNewAnimals(_playground.GetPlaygroundArray().GetLength(0),
+                                           _playground.GetPlaygroundArray().GetLength(0),
+                                           selectedOperation);
+                _savanna.UpdatePlayground(_playground);
 
             } while (true);
         }
@@ -56,15 +54,17 @@ namespace Savanna.Savanna
         /// <summary>
         /// Game loop.
         /// </summary>
-        /// <param name="obj"> null. </param>
+        /// <param name="obj"> Null. </param>
         private void GameLifeCycle(object obj)
         {
             _savanna.Iteration(_playground);
-            _savanna.SetNewPlayground(_playground);
+            _savanna.UpdatePlayground(_playground);
             (int, int) cortege = _savanna.NumbersOfAnimals();
 
             _userUI.DisplayPlayground(_playground);
             _userUI.DisplayNumberOfHuntersAndHebrivores(cortege.Item1,cortege.Item2);
+            _userUI.DisplayAnimalStatistics(_savanna.GetListOfHunters(), _savanna.GetListOfHerbivores());
         }
+
     }
 }

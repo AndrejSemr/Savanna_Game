@@ -1,13 +1,28 @@
-﻿using Savanna.Savanna.Animals;
+﻿using AnimalsBase;
 using System;
-using System.Collections.Generic;
-using System.Text;
 
-namespace Savanna.Savanna_Game.Animals
+namespace Animal
 {
-    public class Tiger: Hunters
+    public class Tiger : Hunters
     {
-        public Tiger(IPlayground playground) : base(playground)
+        /// <summary>
+        /// Property stores button for creating an animal.
+        /// </summary>
+        public override ConsoleKey AnimalConsoleKey
+        {
+            get
+            {
+                return ConsoleKey.T;
+            }
+            set { }
+        }
+
+        /// <summary>
+        /// Constructor for Tiger.
+        /// </summary>
+        /// <param name="arraySizeX"> Number of rows in array. </param>
+        /// <param name="arraySizeY"> Number of column in array. </param>
+        public Tiger(int arraySizeX, int arraySizeY) : base(arraySizeX, arraySizeY)
         {
             AnimalTypeLabel = 'T';
             AnimalType = "Tiger";
@@ -15,11 +30,6 @@ namespace Savanna.Savanna_Game.Animals
             maximumHealth = 30;
             Health = maximumHealth;
             VisionRange = 4;
-        }
-
-        public Tiger(IPlayground playground, int currentPositionX, int currentPositionY, int rangeX, int rangeY)
-        : base(playground, currentPositionX, currentPositionY, rangeX, rangeY)
-        {
         }
     }
 }

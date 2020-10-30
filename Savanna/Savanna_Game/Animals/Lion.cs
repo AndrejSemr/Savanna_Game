@@ -1,8 +1,28 @@
-﻿namespace Savanna.Savanna.Animals
+﻿using AnimalsBase;
+using System;
+
+namespace Animal
 {
     public class Lion : Hunters
     {
-        public Lion(IPlayground playground):base(playground)
+        /// <summary>
+        /// Property stores button for creating an animal.
+        /// </summary>
+        public override ConsoleKey AnimalConsoleKey
+        {
+            get
+            {
+                return ConsoleKey.L;
+            }
+            set { }
+        }
+
+        /// <summary>
+        /// Constructor for Lion.
+        /// </summary>
+        /// <param name="arraySizeX"> Number of rows in array. </param>
+        /// <param name="arraySizeY"> Number of column in array. </param>
+        public Lion(int arraySizeX, int arraySizeY) : base(arraySizeX, arraySizeY)
         {
             AnimalTypeLabel = 'L';
             AnimalType = "Lion";
@@ -10,11 +30,6 @@
             maximumHealth = 10;
             Health = maximumHealth;
             VisionRange = 6;
-        }
-
-        public Lion(IPlayground playground, int currentPositionX, int currentPositionY, int rangeX, int rangeY)
-                : base(playground, currentPositionX, currentPositionY, rangeX, rangeY)
-        {
         }
     }
 }

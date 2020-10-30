@@ -1,20 +1,43 @@
-﻿using System.Collections;
+﻿using System;
 using System.Collections.Generic;
-using Savanna.Savanna.Animals;
-using Savanna.Savanna_Game.Animals;
+using Animal;
+using AnimalsBase;
 
 namespace Savanna.Savanna
 {
     /// <summary>
-    /// Class simulated savanna.
+    /// Class simulates savanna.
     /// </summary>
     public class SavannaEngine : ISavanna
     {
-        public List<Hunters> hunters = new List<Hunters>();
-        public List<Herbivores> hebrivores = new List<Herbivores>();
+        private List<Hunters> _hunters = new List<Hunters>();
+        private List<Herbivores> _hebrivores = new List<Herbivores>();
+        private TypeKeeper _typeKeeper = new TypeKeeper();
 
-        private int _huntersLimit = 20;
-        private int _hebrivoresLimit = 30;
+        private int _maximumNumberOfHunters = 20;
+        private int _maximumNumberOfHebrivores = 30;
+
+        #region ListsGeters;
+
+        /// <summary>
+        /// Method return list of hunters.
+        /// </summary>
+        /// <returns> List of hunters. </returns>
+        public List<Hunters> GetListOfHunters()
+        {
+            return _hunters;
+        }
+
+        /// <summary>
+        /// Method return list of herbivores.
+        /// </summary>
+        /// <returns> List of herbivores. </returns>
+        public List<Herbivores> GetListOfHerbivores()
+        {
+            return _hebrivores;
+        }
+
+        #endregion;
 
         /// <summary>
         /// Add new Hunter to Hunters array.
@@ -22,7 +45,10 @@ namespace Savanna.Savanna
         /// <param name="animal"> Hunter animal. </param>
         public void AddHunters(Hunters animal)
         {
-            hunters.Add(animal);
+            if(_hunters.Count <= _maximumNumberOfHunters)
+            {
+                _hunters.Add(animal);
+            }
         }
 
         /// <summary>
@@ -31,144 +57,117 @@ namespace Savanna.Savanna
         /// <param name="animal"> Herbivore animal. </param>
         public void AddHerbivores(Herbivores animal)
         {
-            hebrivores.Add(animal);
+            if(_hebrivores.Count <= _maximumNumberOfHebrivores)
+            {
+                _hebrivores.Add(animal);
+            }
         }
 
         /// <summary>
         /// Method returns number of hunters and herbivores.
         /// </summary>
-        /// <returns> (int,int)cortege - Number of hunters, number of hebrivores. </returns>
+        /// <returns> Number of hunters, number of hebrivores. </returns>
         public (int, int) NumbersOfAnimals()
         {
-            return (hunters.Count, hebrivores.Count);
+            return (_hunters.Count, _hebrivores.Count);
         }
 
         /// <summary>
-        /// Method create a new animal based on animal number.
+        /// Method create a new animal based on pressed button.
         /// </summary>
-        /// <param name="animalNumber"> Anumal number. </param>
-        public void GeneratNewAnimals(IPlayground _playground, int animalNumber)
+        /// <param name="playgroundsNumberOfRows"> Playgrounds number of rows. </param>
+        /// <param name="playgroundsNumberOfColumns"> Playgrounds number of columns. </param>
+        /// <param name="pressedButton"> Pressed button. </param>
+        public void GeneratNewAnimals(int playgroundsNumberOfRows, int playgroundsNumberOfColumns, ConsoleKey pressedButton)
         {
+            Type animalType;
+            bool isSelectedItemInDictionary = _typeKeeper.typeDictionary.TryGetValue(pressedButton, out animalType);
 
-            switch (animalNumber)
+            if (isSelectedItemInDictionary)
             {
-                case 1:
-                    AddHunters(new Lion(_playground));
-                    break;
-                case 2:
-                    AddHerbivores(new Antelope(_playground));
-                    break;
-                case 3:
-                    AddHunters(new Tiger(_playground));
-                    break;
-                case 4:
-                    //AddHerbivores(new AnimalDllCreator.Deer(_playground));
-                    break;
-
-
-                /// DELETE AFTER TESTS
-                case -1:
-                    Antelope antelope1 = new Antelope(_playground) { XPaygroundCoordinate = 2, YPaygroundCoordinate = 2 };
-                    Antelope antelope2 = new Antelope(_playground) { XPaygroundCoordinate = 1, YPaygroundCoordinate = 2 };
-
-                    AddHerbivores(antelope1);
-                    AddHerbivores(antelope2);
-
-                    break;
-
-                case -2:
-
-                    Lion lion1 = new Lion(_playground) { XPaygroundCoordinate = 7, YPaygroundCoordinate = 1 };
-                    Lion lion2 = new Lion(_playground) { XPaygroundCoordinate = 8, YPaygroundCoordinate = 1 };
-
-                    AddHunters(lion1);
-                    AddHunters(lion2);
-
-                    break;
+                AddAnumalToList(animalType, playgroundsNumberOfRows, playgroundsNumberOfColumns);
             }
         }
 
         /// <summary>
-        /// Method simulates one iteration. 
+        /// Method creates a new animal by type and adds it to List.
+        /// </summary>
+        /// <param name="animalType"> Animal type. </param>
+        /// <param name="numberOfRows"> Playgrounds number of rows. </param>
+        /// <param name="numberOfColumns"> Playgrounds  number of columns. </param>
+        private void AddAnumalToList(Type animalType, int numberOfRows, int numberOfColumns)
+        {
+            object instanceOfAnimal = Activator.CreateInstance(animalType, numberOfRows, numberOfColumns);
+
+            if (animalType.BaseType.Name.ToString() == "Hunters")
+            {
+                Hunters hunters = (Hunters)instanceOfAnimal;
+                AddHunters(hunters);
+            }
+            else
+            {
+                Herbivores herbivores = (Herbivores)instanceOfAnimal;
+                AddHerbivores(herbivores);
+            }
+        }
+
+        /// <summary>
+        /// Method simulates one iteration.
         /// </summary>
         /// <param name="playground"> Playground. </param>
         public void Iteration(IPlayground playground)
         {
-            int xArraySize = playground.GetPlaygroundArray().GetLength(0);
-            int yArraySize = playground.GetPlaygroundArray().GetLength(1);
+            int numberOfRows = playground.GetPlaygroundArray().GetLength(0);
+            int numberOfColumns = playground.GetPlaygroundArray().GetLength(1);
 
-            int huntersBirth = 0;
-            int hebrivoresBirth = 0;
-
-            for (int i = 0; i < hunters.Count; i++)
+            for (int index = 0; index < _hunters.Count; index++)
             {
-                hunters[i].SpecialAnimalBehavior(hunters, hebrivores, playground);
+                _hunters[index].SpecialAnimalBehavior(_hunters, _hebrivores, playground.GetPlaygroundArray());
 
-                if ((hunters[i].TimeToGiveBorth == 3) && (hunters.Count < _huntersLimit))
+                if ((_hunters[index].TimeToGiveBorth >= 3) && (_hunters.Count < _maximumNumberOfHunters))
                 {
-                    hunters[i].TimeToGiveBorth = 0;
-                    huntersBirth++;
+                    _hunters[index].TimeToGiveBorth = 0;
+                    AddAnumalToList(_hunters[index].GetType(), numberOfRows, numberOfColumns);
                 }
             }
 
-            for (int index = 0; index < hebrivores.Count; index++)
+            for (int index = 0; index < _hebrivores.Count; index++)
             {
-                hebrivores[index].SpecialAnimalBehavior(hunters, hebrivores, playground);
+                _hebrivores[index].SpecialAnimalBehavior(_hunters, _hebrivores, playground.GetPlaygroundArray());
 
-                if ((hebrivores[index].TimeToGiveBorth >= 3) && (hebrivores.Count <= _hebrivoresLimit))
+                if ((_hebrivores[index].TimeToGiveBorth >= 3) && (_hebrivores.Count <= _maximumNumberOfHebrivores))
                 {
-                    hebrivores[index].TimeToGiveBorth = 0;
-                    hebrivoresBirth++;
-                    
+                    _hebrivores[index].TimeToGiveBorth = 0;
+                    AddAnumalToList(_hebrivores[index].GetType(), numberOfRows, numberOfColumns);
                 }
             }
-
-            Birthday(playground, huntersBirth, true);
-            Birthday(playground, hebrivoresBirth, false);
 
             AnimalHealthCheck();
         }
 
-        protected void Birthday(IPlayground playground,int counter,bool isHunter)
-        {
-            counter = (counter / 2);
-            for (int index = 0; index < counter; index++)
-            {
-                if (isHunter)
-                {
-                    Lion lion = new Lion(playground);
-                    AddHunters(lion);
-                }
-                else
-                {
-                    Antelope antelope = new Antelope(playground);
-                    AddHerbivores(antelope);
-                }
-            }
-        }
 
         /// <summary>
         /// Updates Playground with new data.
         /// </summary>
         /// <param name="playground"> Playground. </param>
-        public void SetNewPlayground(IPlayground playground)
+        public void UpdatePlayground(IPlayground playground)
         {
             playground.ZerroArray();
 
-            for (int index = 0; index < hebrivores.Count; index++)
+            for (int index = 0; index < _hebrivores.Count; index++)
             {
-                int x = hebrivores[index].XPaygroundCoordinate;
-                int y = hebrivores[index].YPaygroundCoordinate;
+                int x = _hebrivores[index].XPaygroundCoordinate;
+                int y = _hebrivores[index].YPaygroundCoordinate;
 
-                playground.SetValue(x, y, hebrivores[index].AnimalTypeLabel);
+                playground.SetValue(x, y, _hebrivores[index].AnimalTypeLabel);
             }
 
-            for (int index = 0; index < hunters.Count; index++)
+            for (int index = 0; index < _hunters.Count; index++)
             {
-                int x = hunters[index].XPaygroundCoordinate;
-                int y = hunters[index].YPaygroundCoordinate;
+                int x = _hunters[index].XPaygroundCoordinate;
+                int y = _hunters[index].YPaygroundCoordinate;
 
-                playground.SetValue(x, y, hunters[index].AnimalTypeLabel);
+                playground.SetValue(x, y, _hunters[index].AnimalTypeLabel);
             }
         }
 
@@ -177,21 +176,22 @@ namespace Savanna.Savanna
         /// </summary>
         private void AnimalHealthCheck()
         {
-            for (int i = 0; i < hunters.Count; i++)
+            for (int index = 0; index < _hunters.Count; index++)
             {
-                if (hunters[i].Health <= 0)
+                if (_hunters[index].Health <= 0)
                 {
-                    hunters.RemoveAt(i);
+                    _hunters.RemoveAt(index);
                 }
             }
 
-            for (int i = 0; i < hebrivores.Count; i++)
+            for (int index = 0; index < _hebrivores.Count; index++)
             {
-                if (hebrivores[i].Health <= 0)
+                if (_hebrivores[index].Health <= 0)
                 {
-                    hebrivores.RemoveAt(i);
+                    _hebrivores.RemoveAt(index);
                 }
             }
         }
+
     }
 }

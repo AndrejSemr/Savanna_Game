@@ -1,15 +1,21 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace Savanna.Savanna.Animals
+namespace AnimalsBase
 {
     /// <summary>
     /// Abstract class for all animals.
     /// </summary>
+    /// 
     public abstract class Animal : PositionOnPlayground
     {
-        
+
         protected double maximumHealth;
+
+        /// <summary>
+        /// Property stores button for creating an animal.
+        /// </summary>
+        public abstract ConsoleKey AnimalConsoleKey { get; set; }
 
         /// <summary>
         /// Animal label (L, A...).
@@ -17,17 +23,17 @@ namespace Savanna.Savanna.Animals
         public char AnimalTypeLabel { get; set; }
 
         /// <summary>
-        /// Animal type (Lion, Antelope...).
+        /// Animal type name (Lion, Antelope...).
         /// </summary>
         public string AnimalType { get; set; }
 
         /// <summary>
-        /// Parameter tracks next point birth.
+        /// Property tracks next point birth.
         /// </summary>
         public int TimeToGiveBorth { get; set; }
 
         /// <summary>
-        /// Animal health metric.
+        /// Animal health metric property.
         /// </summary>
         public double Health { get; set; }
         
@@ -36,72 +42,28 @@ namespace Savanna.Savanna.Animals
         /// </summary>
         protected int VisionRange { get; set; }
 
-        #region Constructors
+        #region Constructor
 
         /// <summary>
         /// Animal constructor.
         /// </summary>
-        /// <param name="playground"> Playground. </param>
-        public Animal(IPlayground playground)
+        /// <param name="arraySizeX"> Number of rows in array. </param>
+        /// <param name="arraySizeY"> Number of column in array. </param>
+        public Animal(int arraySizeX, int arraySizeY)
         {
-            double arrayRowCount = playground.GetPlaygroundArray().GetLength(0);
-            double arrayColumnCount = playground.GetPlaygroundArray().GetLength(0);
-            int middleX = (int)Math.Round((arrayRowCount / 2) - 0.5);
-            int middleY = (int)Math.Round((arrayColumnCount / 2) - 0.5);
-            SetRandomPositionInRange(playground, middleX, middleY, middleX-1, middleY-1);
-        }
-
-        
-        public Animal(IPlayground playground, int currentPositionX, int currentPositionY, int rangeX, int rangeY)
-        {
-            //SetRandomPositionInRange(playground, currentPositionX, currentPositionY, rangeX, rangeY);
-            // AddHerbivores(new Antelope(_playground, X, Y , 3, 3));
-            SetRandomPositionInRange(playground, currentPositionX, currentPositionY, rangeX, rangeY);
+            SetRandomPositionInRange(arraySizeX, arraySizeY);
         }
 
         /// <summary>
         /// Method sets random position in range for animal.
         /// </summary>
-        /// <param name="playground"> Playground. </param>
-        private void SetRandomPositionInRange(IPlayground playground, int positionX, int positionY, int shiftX, int shiftY)
+        /// <param name="arraySizeX"> Number of rows in array. </param>
+        /// <param name="arraySizeY"> Number of column in array. </param>
+        public void SetRandomPositionInRange(int arraySizeX, int arraySizeY)
         {
             Random random = new Random();
-            int newXCoord;
-            int newYCoord;
-            bool coodinateIsOk = false;
-            int pointIsNotNullCount = 0;
-            int arrayXSize = playground.GetPlaygroundArray().GetLength(0);
-            int arrayYSize = playground.GetPlaygroundArray().GetLength(1);
-
-            while (!coodinateIsOk)
-            {
-                int randomXShift = random.Next(-shiftX, shiftX);
-                int randomYShift = random.Next(-shiftY, shiftY);
-                if (randomXShift == 0) randomXShift++;
-                if (randomYShift == 0) randomYShift++;
-
-                newXCoord = GetModulNumber(positionX, randomXShift, arrayXSize);
-                newYCoord = GetModulNumber(positionY, randomYShift, arrayYSize);
-
-                if (playground.GetValue(newXCoord, newYCoord) == '.')
-                {
-
-                    XPaygroundCoordinate = newXCoord;
-                    YPaygroundCoordinate = newYCoord;
-                    coodinateIsOk = true;
-                }
-                else if (pointIsNotNullCount > 20)
-                {
-                    int middleX = (int)Math.Round((playground.GetPlaygroundArray().GetLength(0) / 2) - 0.5);
-                    int middleY = (int)Math.Round((playground.GetPlaygroundArray().GetLength(0) / 2) - 0.5);
-
-                    SetRandomPositionInRange(playground, middleX, middleY, middleX-2, middleY-2);
-                }
-                else
-                {
-                    pointIsNotNullCount++;
-                }
-            }
+            XPaygroundCoordinate = random.Next(0, arraySizeX);
+            YPaygroundCoordinate = random.Next(0, arraySizeY);
         }
 
         #endregion
@@ -111,8 +73,8 @@ namespace Savanna.Savanna.Animals
         /// </summary>
         /// <param name="hunters"> List of hunters. </param>
         /// <param name="herbivores"> List of herbivores. </param>
-        /// <param name="playground"> Playground array </param>
-        public virtual void SpecialAnimalBehavior(List<Hunters> hunters,List<Herbivores> herbivores, IPlayground playground)
+        /// <param name="playground"> Playground array of char. </param>
+        public virtual void SpecialAnimalBehavior(List<Hunters> hunters, List<Herbivores> herbivores, char[,] playground)
         {   
         }
 
@@ -171,7 +133,7 @@ namespace Savanna.Savanna.Animals
         /// <param name="xArraySize"> Playground array size (X coordinate). </param>
         /// <param name="yArraySize"> Playground array size (Y coordinate). </param>
         /// <param name="animalType"> Animal type. </param>
-        /// <returns></returns>
+        /// <returns> Closest animal index (With same type). </returns>
         protected int FindClosestAnumalIndexByType<T>(List<T> animal, int xArraySize, int yArraySize, string animalType) where T : Animal
         {
             int idOfClosestAnimal = -1;
@@ -206,7 +168,7 @@ namespace Savanna.Savanna.Animals
         }
 
         /// <summary>
-        /// Method finds a short distance between animals.
+        /// Method finds a shorter distance between animals.
         /// </summary>
         /// <param name="firstAnimalXCoordinate"> First animal X coordinate. </param>
         /// <param name="firstAnimalYCoordinate"> First animal Y coordinate. </param>
@@ -214,7 +176,7 @@ namespace Savanna.Savanna.Animals
         /// <param name="secondAnimalYCoordinate"> Second animal Y coordinate. </param>
         /// <param name="xArraySize"> Array size X coordinate ass. </param>
         /// <param name="yArraySize"> Array size Y coordinate ass. </param>
-        /// <returns> double - Distance between animals. </returns>
+        /// <returns> Distance between animals. </returns>
         public double DistanceBetweenToAnimalse(int firstAnimalXCoordinate, int firstAnimalYCoordinate, int secondAnimalXCoordinate, int secondAnimalYCoordinate, int xArraySize, int yArraySize)
         {
             int distanceByX = FindShortDistance(firstAnimalXCoordinate, secondAnimalXCoordinate, xArraySize);
@@ -222,8 +184,6 @@ namespace Savanna.Savanna.Animals
 
             return Math.Sqrt(Math.Pow(distanceByX, 2) + Math.Pow(distanceByY, 2));
         }
-
-       
 
         /// <summary>
         /// Method return smallest distance from points in coodrinate circle.
@@ -251,7 +211,7 @@ namespace Savanna.Savanna.Animals
         /// <param name="position"> Current point. </param>
         /// <param name="target"> Target point. </param>
         /// <param name="arrayLenght"> Playground length. </param>
-        /// <returns> int - return distance between points in coodrinate line. </returns>
+        /// <returns> Distance between points in coodrinate line. </returns>
         public int CalculatingDistance(int position, int target, int arrayLenght)
         {
             return ((position - target) + arrayLenght) % arrayLenght;
@@ -263,7 +223,7 @@ namespace Savanna.Savanna.Animals
         /// <param name="coord"> Current position.</param>
         /// <param name="shift"> Offset/next coordinate to check. </param>
         /// <param name="arrayLenght"> Array size/lenght/border. </param>
-        /// <returns> int - Next cell coordinate. </returns>
+        /// <returns> Next cell coordinate. </returns>
         protected int GetModulNumber(int coord, int shift, int arrayLenght)
         {
             return (coord + shift + arrayLenght) % arrayLenght;
@@ -273,11 +233,11 @@ namespace Savanna.Savanna.Animals
         /// Method move hunter closer to targer.
         /// </summary>
         /// <param name="animal"> An animal. </param>
-        /// <param name="playground"> Array size (rows,columns) </param>
-        /// <param name="isHunter"> Is it hunter. </param>
-        protected void Spet(Animal animal, IPlayground playground, bool isHunter)
+        /// <param name="arrayPlayground"> Playground array of char. </param>
+        /// <param name="isHunter"> Is it hunter? </param>
+        protected void Spet(Animal animal, char[,] arrayPlayground, bool isHunter)
         {
-            (int, int) arraySize = (playground.GetPlaygroundArray().GetLength(0), playground.GetPlaygroundArray().GetLength(1));
+            (int, int) arraySize = (arrayPlayground.GetLength(0), arrayPlayground.GetLength(1));
 
             int offsetX = ShortenTheDistance(XPaygroundCoordinate, animal.XPaygroundCoordinate, arraySize.Item1, isHunter);
             int offsetY = ShortenTheDistance(YPaygroundCoordinate, animal.YPaygroundCoordinate, arraySize.Item2, isHunter);
@@ -285,7 +245,7 @@ namespace Savanna.Savanna.Animals
             int newX = GetModulNumber(XPaygroundCoordinate, offsetX, arraySize.Item1);
             int newY = GetModulNumber(YPaygroundCoordinate, offsetY, arraySize.Item2);
 
-            if(playground.GetValue(newX, newY) == '.')
+            if(arrayPlayground[newX, newY] == '.')
             {
                 XPaygroundCoordinate = newX;
                 YPaygroundCoordinate = newY;
@@ -299,7 +259,7 @@ namespace Savanna.Savanna.Animals
         /// <param name="position"> Hunter position. </param>
         /// <param name="target"> Target position. </param>
         /// <param name="arrayLenght"> Array length. </param>
-        /// <returns> int - next coordinate shift. </returns>
+        /// <returns> Next coordinate shift. </returns>
         private int ShortenTheDistance(int position, int target, int arrayLenght, bool isHunter)
         {
             int returnNumberInRightSide = CalculatingDistance(position, target, arrayLenght);
